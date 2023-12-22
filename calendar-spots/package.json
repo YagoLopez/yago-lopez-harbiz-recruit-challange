@@ -1,11 +1,14 @@
 {
-  "name": "calendar-spots",
+  "name": "calendar-spots-by-yago-lopez",
   "version": "1.0.0",
-  "description": "Harbiz challenge (JavaScript): Refactoring - Calendar spots",
+  "description": "Harbiz challenge (JavaScript): Refactoring - Calendar spots By Yago López",
   "main": "index.js",
   "scripts": {
     "test": "jest Calendar.test.js",
-    "lint": "eslint ."
+    "test:watch": "jest --watch Calendar.test.js",
+    "test:coverage": "jest --coverage Calendar.test.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "author": "Amine <amine@harbiz.io>",
   "license": "ISC",
