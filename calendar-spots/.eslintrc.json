@@ -3,5 +3,18 @@
     "globals": {
         "it": false,
         "describe": false
-    }
+    },
+    "parser": "babel-eslint",
+    "overrides": [
+        {
+            "files": [
+                "**/*.spec.js",
+                "**/*.test.ts",
+                "**/*.spec.jsx"
+            ],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }
