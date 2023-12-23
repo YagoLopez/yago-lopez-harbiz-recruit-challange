@@ -5,6 +5,7 @@ import moment  from "moment";
 import { TCalendar, Duration } from "./types";
 // import * as data from './calendars/calendar.1.json'
 
+/*
 export default class Calendar2 {
 
   static getAvailableSpots (calendar: number, date: string, duration: number) {
@@ -112,8 +113,9 @@ export default class Calendar2 {
 
   }
 }
+*/
 
-export class Calendar3 {
+export default class Calendar2 {
 
   static getSlots(calendarData: TCalendar, date: string): Duration[] {
     const slots = calendarData.slots[date]
@@ -133,7 +135,7 @@ export class Calendar3 {
   }
 
   static isValidEventDuration(calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string){
-    const totalUserDuration = Calendar3.getTotalDurationUserRequest(calendarData, userRequestedDuration)
+    const totalUserDuration = Calendar2.getTotalDurationUserRequest(calendarData, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const {start, end} = eventDuration
     const startHour = moment(`${dateISO}T${start}`);
@@ -142,10 +144,68 @@ export class Calendar3 {
     return slotDuration >= totalUserDuration
   }
 
+  static getPossibleSlots(calendarData: TCalendar, slots: Duration[], date: string, duration: number): Duration[]{
+    let possibleSlots: Duration[] = []
+    slots.forEach((slot: Duration)=>{
+      if(Calendar2.isValidEventDuration(calendarData, slot, duration, date)){
+        possibleSlots.push(slot)
+      }
+    })
+    return possibleSlots
+  }
+
+  static isValidSlot(slot: Duration, sessions: Duration[]): boolean{
+    let result = true
+    for(const session of sessions){
+      if(slot.start === session.start && slot.end === session.end){
+        result = false
+      }
+    }
+    return result
+  }
+
+  static getValidSlot(calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]){
+    let result: Duration[] = []
+    for(const slot of possibleSlots){
+      const isValid = this.isValidSlot(slot, sessions)
+      console.log("isValid", isValid, "slot", slot);
+      if(isValid){
+        return [slot]
+      }
+    }
+    return result
+  }
+/*
+  static getValidSlot(calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[], date: string){
+    let result: Duration[] = []
+    possibleSlots.forEach((slot: Duration)=>{
+      for(const session of sessions){
+        const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+        const sessionStart = moment(`${dateISO}T${session.start}`);
+        const slotStart = moment(`${dateISO}T${slot.start}`);
+        const slotEnd = moment(`${dateISO}T${slot.end}`);
+
+        if(sessionStart >= slotStart && sessionStart <= slotEnd){
+          return
+        }
+
+        result.push(slot)
+      }
+    })
+    return result
+  }
+*/
+
   static getAvailableSpots (calendar: number, date: string, duration: number) {
-    const data = require(`./calendars/calendar.${calendar}.json`) as TCalendar
+    const calendarData = require(`./calendars/calendar.${calendar}.json`) as TCalendar
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
-    const { durationBefore, durationAfter } = data
+    const { durationBefore, durationAfter } = calendarData
+
+    const slots = Calendar2.getSlots(calendarData, date)
+
+    const sessions = Calendar2.getSessions(calendarData, date)
+
+    const possibleSlots = Calendar2.getPossibleSlots(calendarData, slots, date, duration)
 
   }
 }
