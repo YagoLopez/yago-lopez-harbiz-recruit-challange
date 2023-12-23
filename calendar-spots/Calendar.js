@@ -1,3 +1,5 @@
+// todo: dockerize
+
 const moment = require('moment')
 const fs = require('fs')
 
@@ -59,7 +61,9 @@ function getAvailableSpots (calendar, date, duration) {
     }
 
     function addMinutes (hour, minutes) {
-      const result = moment(hour).add(minutes, 'minutes').format('HH:mm')
+      const result = moment(hour)
+        .add(minutes, 'minutes')
+        .format('HH:mm')
       return result
     }
 
@@ -67,22 +71,24 @@ function getAvailableSpots (calendar, date, duration) {
       const startHourFirst = getMomentHour(startSlot)
 
       startHour = startHourFirst.format('HH:mm')
-      endHour = addMinutes(startHourFirst, durationBefore + duration + durationAfter)
+      endHour = addMinutes(
+        startHourFirst,
+        durationBefore + duration + durationAfter
+      )
       clientStartHour = addMinutes(startHourFirst, durationBefore)
       clientEndHour = addMinutes(startHourFirst, duration)
 
-      if (moment.utc(endHour, 'HH:mm').valueOf() > moment.utc(endSlot, 'HH:mm').valueOf()) {
+      if (
+        moment.utc(endHour, 'HH:mm').valueOf() >
+        moment.utc(endSlot, 'HH:mm').valueOf()
+      ) {
         return null
       }
       const objSlot = {
-        startHour: moment.utc(dateISO + ' ' + startHour)
-          .toDate(),
-        endHour: moment.utc(dateISO + ' ' + endHour)
-          .toDate(),
-        clientStartHour: moment.utc(dateISO + ' ' + clientStartHour)
-          .toDate(),
-        clientEndHour: moment.utc(dateISO + ' ' + clientEndHour)
-          .toDate()
+        startHour: moment.utc(dateISO + ' ' + startHour).toDate(),
+        endHour: moment.utc(dateISO + ' ' + endHour).toDate(),
+        clientStartHour: moment.utc(dateISO + ' ' + clientStartHour).toDate(),
+        clientEndHour: moment.utc(dateISO + ' ' + clientEndHour).toDate()
       }
       init += 1
       return objSlot
