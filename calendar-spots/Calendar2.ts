@@ -2,8 +2,8 @@ import moment from 'moment'
 import { TCalendar, Event } from './types'
 
 /**
- * Class: Calendar2
- * Calendar data can not be emply (Typescript strict flag enabled)
+ * Class: Calendar
+ * Calendar data can not be empty (Typescript strict flag enabled)
  * Load calendar 1 by default
  */
 export default class Calendar2 {
@@ -25,14 +25,13 @@ export default class Calendar2 {
     return sessions
   }
 
-  // todo: rename calendarData to calendar
-  getTotalDurationUserRequest (calendarData: TCalendar, duration: number): number {
-    const { durationBefore, durationAfter } = calendarData
+  getTotalDurationUserRequest (calendar: TCalendar, duration: number): number {
+    const { durationBefore, durationAfter } = calendar
     return durationBefore + durationAfter + duration
   }
 
-  isValidDuration (calendarData: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string):boolean {
-    const totalUserDuration = this.getTotalDurationUserRequest(calendarData, userRequestedDuration)
+  isValidDuration (calendar: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string):boolean {
+    const totalUserDuration = this.getTotalDurationUserRequest(calendar, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
     const startHour = moment(`${dateISO}T${start}`)
@@ -41,10 +40,10 @@ export default class Calendar2 {
     return slotDuration >= totalUserDuration
   }
 
-  getPossibleSlots (calendarData: TCalendar, slots: Event[], date: string, duration: number): Event[] {
+  getPossibleSlots (calendar: TCalendar, slots: Event[], date: string, duration: number): Event[] {
     const possibleSlots: Event[] = []
     slots.forEach((slot: Event) => {
-      if (this.isValidDuration(calendarData, slot, duration, date)) {
+      if (this.isValidDuration(calendar, slot, duration, date)) {
         possibleSlots.push(slot)
       }
     })
