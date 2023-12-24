@@ -82,14 +82,13 @@ export default class Calendar {
   getAvailableSpots (calendarId: number, date: string, duration: number) {
     this.calendarData = this.loadCalendar(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
-    const { durationBefore, durationAfter } = this.calendarData
     const slots = this.getSlots(date)
     if (slots.length === 0) return []
 
     const sessions = this.getSessions(date)
     const possibleSlots = this.getPossibleSlots(this.calendarData, slots, date, duration)
     const validSlot = this.getValidSlot(possibleSlots, sessions)
-    const totalDuration = durationBefore + durationAfter + duration
+    const totalDuration = this.getTotalDuration(this.calendarData, duration)
 
     const objSlot = {
       startHour: this.getStartHour(dateISO, validSlot?.start),
