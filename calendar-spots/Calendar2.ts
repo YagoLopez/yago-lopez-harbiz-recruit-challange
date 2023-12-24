@@ -13,14 +13,14 @@ export default class Calendar2 {
     return require(`./calendars/calendar.${calendarId}.json`)
   }
 
-  getSlots (calendarData: TCalendar, date: string): Duration[] {
-    const slots = calendarData.slots[date]
+  getSlots (date: string): Duration[] {
+    const slots = this.calendarData.slots[date]
     if (!slots) return []
     return slots
   }
 
-  getSessions (calendarData: TCalendar, date: string): Duration[] {
-    const sessions = calendarData.sessions[date]
+  getSessions (date: string): Duration[] {
+    const sessions = this.calendarData.sessions[date]
     if (!sessions) return []
     return sessions
   }
@@ -60,7 +60,7 @@ export default class Calendar2 {
     return result
   }
 
-  getValidSlot (calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
+  getValidSlot (possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
     const result = undefined
     for (const slot of possibleSlots) {
       const isValid = this.isValidSlot(slot, sessions)
@@ -84,12 +84,12 @@ export default class Calendar2 {
     this.calendarData = this.loadCalendarData(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { durationBefore, durationAfter } = this.calendarData
-    const slots = this.getSlots(this.calendarData, date)
+    const slots = this.getSlots(date)
     if (slots.length === 0) return []
 
-    const sessions = this.getSessions(this.calendarData, date)
+    const sessions = this.getSessions(date)
     const possibleSlots = this.getPossibleSlots(this.calendarData, slots, date, duration)
-    const validSlot = this.getValidSlot(this.calendarData, possibleSlots, sessions)
+    const validSlot = this.getValidSlot(possibleSlots, sessions)
     const totalDuration = durationBefore + durationAfter + duration
 
     const objSlot = {

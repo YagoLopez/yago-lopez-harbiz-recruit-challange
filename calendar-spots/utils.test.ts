@@ -72,7 +72,7 @@ describe('getValidSlots()', () => {
     const sessions = [
       { start: '11:15', end: '13:15' }
     ]
-    const res = calendar2.getValidSlot(calendarData1, possibleSlots, sessions)
+    const res = calendar2.getValidSlot(possibleSlots, sessions)
     expect(res).toStrictEqual(possibleSlots[1])
   })
 
@@ -86,7 +86,7 @@ describe('getValidSlots()', () => {
       { start: '12:00', end: '12:45' },
       { start: '16:15', end: '17:45' }
     ]
-    const res = calendar2.getValidSlot(calendarData2, possibleSlots, sessions)
+    const res = calendar2.getValidSlot(possibleSlots, sessions)
     expect(res).toStrictEqual(possibleSlots[2])
   })
 
