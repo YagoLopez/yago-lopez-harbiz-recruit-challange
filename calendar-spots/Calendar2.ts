@@ -25,9 +25,9 @@ export default class Calendar2 {
     return sessions
   }
 
-  getTotalDurationUserRequest (calendarData: TCalendar, userRequestDuration: number): number {
+  getTotalDurationUserRequest (calendarData: TCalendar, duration: number): number {
     const { durationBefore, durationAfter } = calendarData
-    return durationBefore + durationAfter + userRequestDuration
+    return durationBefore + durationAfter + duration
   }
 
   isValidDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
