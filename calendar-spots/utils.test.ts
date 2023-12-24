@@ -1,5 +1,5 @@
 import Calendar2 from './Calendar2'
-import { Duration } from './types'
+import { Event } from './types'
 const calendarData1 = require('./calendars/calendar.1.json')
 const calendarData2 = require('./calendars/calendar.2.json')
 const calendarData3 = require('./calendars/calendar.3.json')
@@ -57,7 +57,7 @@ describe('getPossibleSlots()', () => {
   })
 
   it('Calendar 3', () => {
-    const slots: Duration[] = []
+    const slots: Event[] = []
     const res = calendar2.getPossibleSlots(calendarData3, slots, '16-04-2023', 25)
     expect(res).toStrictEqual([])
   })

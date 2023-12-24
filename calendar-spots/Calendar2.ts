@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { TCalendar, Duration } from './types'
+import { TCalendar, Event } from './types'
 
 export default class Calendar2 {
   calendarData: TCalendar
@@ -13,13 +13,13 @@ export default class Calendar2 {
     return require(`./calendars/calendar.${calendarId}.json`)
   }
 
-  getSlots (date: string): Duration[] {
+  getSlots (date: string): Event[] {
     const slots = this.calendarData.slots[date]
     if (!slots) return []
     return slots
   }
 
-  getSessions (date: string): Duration[] {
+  getSessions (date: string): Event[] {
     const sessions = this.calendarData.sessions[date]
     if (!sessions) return []
     return sessions
@@ -30,7 +30,7 @@ export default class Calendar2 {
     return durationBefore + durationAfter + duration
   }
 
-  isValidDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
+  isValidDuration (calendarData: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string) {
     const totalUserDuration = this.getTotalDurationUserRequest(calendarData, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
@@ -40,9 +40,9 @@ export default class Calendar2 {
     return slotDuration >= totalUserDuration
   }
 
-  getPossibleSlots (calendarData: TCalendar, slots: Duration[], date: string, duration: number): Duration[] {
-    const possibleSlots: Duration[] = []
-    slots.forEach((slot: Duration) => {
+  getPossibleSlots (calendarData: TCalendar, slots: Event[], date: string, duration: number): Event[] {
+    const possibleSlots: Event[] = []
+    slots.forEach((slot: Event) => {
       if (this.isValidDuration(calendarData, slot, duration, date)) {
         possibleSlots.push(slot)
       }
@@ -50,7 +50,7 @@ export default class Calendar2 {
     return possibleSlots
   }
 
-  isValidSlot (slot: Duration, sessions: Duration[]): boolean {
+  isValidSlot (slot: Event, sessions: Event[]): boolean {
     let result = true
     for (const session of sessions) {
       if (slot.start === session.start && slot.end === session.end) {
@@ -60,7 +60,7 @@ export default class Calendar2 {
     return result
   }
 
-  getValidSlot (possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
+  getValidSlot (possibleSlots: Event[], sessions: Event[]): Event | undefined {
     const result = undefined
     for (const slot of possibleSlots) {
       const isValid = this.isValidSlot(slot, sessions)

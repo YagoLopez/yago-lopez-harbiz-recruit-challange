@@ -1,13 +1,13 @@
-export interface Duration {
+export interface Event {
   start: string;
   end: string;
 }
 
-type TimeData = { [key: string]: Duration[] }
+type EventList = { [key: string]: Event[] }
 
 export interface TCalendar {
   durationBefore: number;
   durationAfter: number;
-  slots: TimeData;
-  sessions: TimeData;
+  slots: EventList;
+  sessions: EventList;
 }
