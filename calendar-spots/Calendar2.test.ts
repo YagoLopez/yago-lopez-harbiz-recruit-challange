@@ -3,7 +3,7 @@ import assert from 'assert'
 import Calendar2 from './Calendar2'
 
 describe('getAvailableSpot', function () {
-  it('Should get 1 available spots of calendar 1 a', function () {
+  it('Should get 1 available spots of calendar 1', function () {
     const result = Calendar2.getAvailableSpots(1, '10-04-2023', 30)
     assert.ok(result)
     assert.equal(result.length, 1)
@@ -19,7 +19,7 @@ describe('getAvailableSpot', function () {
 })
 
 describe('getAvailableSpot', function () {
-  it('Should get 1 available spots of calendar 2 b', function () {
+  it('Should get 1 available spots of calendar 2', function () {
     const result = Calendar2.getAvailableSpots(2, '13-04-2023', 25)
     assert.ok(result)
     assert.equal(result.length, 1)
