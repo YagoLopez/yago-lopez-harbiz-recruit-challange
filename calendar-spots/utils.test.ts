@@ -6,22 +6,22 @@ const calendarData3 = require('./calendars/calendar.3.json')
 
 const calendar2 = new Calendar2()
 
-describe('isValidEventDuration()', () => {
+describe('isValidDuration()', () => {
   it('Should return that event duration is valid for user request duration (1)', () => {
     const calendarEventDuration = { start: '16:00', end: '17:15' }
-    const res = calendar2.isValidEventDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar2.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(true)
   })
 
   it('Should return that event duration is valid for user request duration (2)', () => {
     const calendarEventDuration = { start: '11:15', end: '13:15' }
-    const res = calendar2.isValidEventDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar2.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(true)
   })
 
   it('Should return that event duration is invalid for user request duration', () => {
     const calendarEventDuration = { start: '10:00', end: '10:15' }
-    const res = calendar2.isValidEventDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar2.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(false)
   })
 })

@@ -30,7 +30,7 @@ export default class Calendar2 {
     return durationBefore + durationAfter + userRequestDuration
   }
 
-  isValidEventDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
+  isValidDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
     const totalUserDuration = this.getTotalDurationUserRequest(calendarData, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
@@ -43,7 +43,7 @@ export default class Calendar2 {
   getPossibleSlots (calendarData: TCalendar, slots: Duration[], date: string, duration: number): Duration[] {
     const possibleSlots: Duration[] = []
     slots.forEach((slot: Duration) => {
-      if (this.isValidEventDuration(calendarData, slot, duration, date)) {
+      if (this.isValidDuration(calendarData, slot, duration, date)) {
         possibleSlots.push(slot)
       }
     })
