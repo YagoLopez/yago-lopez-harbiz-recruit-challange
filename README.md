@@ -25,6 +25,6 @@ See the tests for more information.
     - You can extend from `Calendar` class and add new functionality with new methods
     - You can extend from `Calendar` class and override the `loadCalendar` method to get data from other data source, for instance.
 - Maintainability: 
-  - Code Coverage for calendar class methods to be able to refactor safely without broking anything
+  - Code Coverage for calendar class methods to be able to refactor safely without breaking anything
   - Clean Code: `Calendar` logic is grouped in small functions (class methods) easy to understand, test and modify
 - Defensive programming: error control loading calendar data
