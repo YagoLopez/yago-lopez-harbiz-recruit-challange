@@ -2,29 +2,36 @@ import moment from 'moment'
 import { TCalendar, Duration } from './types'
 
 export default class Calendar2 {
-  static loadCalendarData (calendarId: number): TCalendar {
+  calendarData: TCalendar
+
+  constructor () {
+    // Calendar Data can not be emply. Load calendar 1 by default
+    this.calendarData = this.loadCalendarData(1)
+  }
+
+  loadCalendarData (calendarId: number): TCalendar {
     return require(`./calendars/calendar.${calendarId}.json`)
   }
 
-  static getSlots (calendarData: TCalendar, date: string): Duration[] {
+  getSlots (calendarData: TCalendar, date: string): Duration[] {
     const slots = calendarData.slots[date]
     if (!slots) return []
     return slots
   }
 
-  static getSessions (calendarData: TCalendar, date: string): Duration[] {
+  getSessions (calendarData: TCalendar, date: string): Duration[] {
     const sessions = calendarData.sessions[date]
     if (!sessions) return []
     return sessions
   }
 
-  static getTotalDurationUserRequest (calendarData: TCalendar, userRequestDuration: number): number {
+  getTotalDurationUserRequest (calendarData: TCalendar, userRequestDuration: number): number {
     const { durationBefore, durationAfter } = calendarData
     return durationBefore + durationAfter + userRequestDuration
   }
 
-  static isValidEventDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
-    const totalUserDuration = Calendar2.getTotalDurationUserRequest(calendarData, userRequestedDuration)
+  isValidEventDuration (calendarData: TCalendar, eventDuration: Duration, userRequestedDuration: number, userRequestDate: string) {
+    const totalUserDuration = this.getTotalDurationUserRequest(calendarData, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
     const startHour = moment(`${dateISO}T${start}`)
@@ -33,17 +40,17 @@ export default class Calendar2 {
     return slotDuration >= totalUserDuration
   }
 
-  static getPossibleSlots (calendarData: TCalendar, slots: Duration[], date: string, duration: number): Duration[] {
+  getPossibleSlots (calendarData: TCalendar, slots: Duration[], date: string, duration: number): Duration[] {
     const possibleSlots: Duration[] = []
     slots.forEach((slot: Duration) => {
-      if (Calendar2.isValidEventDuration(calendarData, slot, duration, date)) {
+      if (this.isValidEventDuration(calendarData, slot, duration, date)) {
         possibleSlots.push(slot)
       }
     })
     return possibleSlots
   }
 
-  static isValidSlot (slot: Duration, sessions: Duration[]): boolean {
+  isValidSlot (slot: Duration, sessions: Duration[]): boolean {
     let result = true
     for (const session of sessions) {
       if (slot.start === session.start && slot.end === session.end) {
@@ -53,7 +60,7 @@ export default class Calendar2 {
     return result
   }
 
-  static getValidSlot (calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
+  getValidSlot (calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
     const result = undefined
     for (const slot of possibleSlots) {
       const isValid = this.isValidSlot(slot, sessions)
@@ -64,25 +71,25 @@ export default class Calendar2 {
     return result
   }
 
-  static getEndHourValidSlot (dateISO: string, slotStart: string | undefined, duration: number) {
+  getEndHourValidSlot (dateISO: string, slotStart: string | undefined, duration: number) {
     const startHour = moment.utc(`${dateISO} ${slotStart}`)
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
-  static getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
+  getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
     return moment.utc(`${dateISO} ${slotStart}`).toDate()
   }
 
-  static getAvailableSpots (calendarId: number, date: string, duration: number) {
-    const calendarData = this.loadCalendarData(calendarId)
+  getAvailableSpots (calendarId: number, date: string, duration: number) {
+    this.calendarData = this.loadCalendarData(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
-    const { durationBefore, durationAfter } = calendarData
-    const slots = Calendar2.getSlots(calendarData, date)
+    const { durationBefore, durationAfter } = this.calendarData
+    const slots = this.getSlots(this.calendarData, date)
     if (slots.length === 0) return []
 
-    const sessions = Calendar2.getSessions(calendarData, date)
-    const possibleSlots = Calendar2.getPossibleSlots(calendarData, slots, date, duration)
-    const validSlot = this.getValidSlot(calendarData, possibleSlots, sessions)
+    const sessions = this.getSessions(this.calendarData, date)
+    const possibleSlots = this.getPossibleSlots(this.calendarData, slots, date, duration)
+    const validSlot = this.getValidSlot(this.calendarData, possibleSlots, sessions)
     const totalDuration = durationBefore + durationAfter + duration
 
     const objSlot = {
