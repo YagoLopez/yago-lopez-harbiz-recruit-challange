@@ -162,26 +162,48 @@ export default class Calendar2 {
     return result
   }
 
-  static getValidSlot (calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]) {
-    const result: Duration[] = []
+  static getValidSlot (calendarData: TCalendar, possibleSlots: Duration[], sessions: Duration[]): Duration | undefined {
+    const result = undefined
     for (const slot of possibleSlots) {
       const isValid = this.isValidSlot(slot, sessions)
       if (isValid) {
-        return [slot]
+        return slot
       }
     }
     return result
   }
 
+  static getEndHourValidSlot (dateISO: string, slotStart: string | undefined, duration: number) {
+    const startHour = moment.utc(`${dateISO} ${slotStart}`)
+    return moment(startHour).add(duration, 'minutes').toDate()
+  }
+
   static getAvailableSpots (calendar: number, date: string, duration: number) {
-    const calendarData: TCalendar = require(`./calendars/calendar.${calendar}.json`)
+    const calendarData = require(`./calendars/calendar.${calendar}.json`)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { durationBefore, durationAfter } = calendarData
 
     const slots = Calendar2.getSlots(calendarData, date)
 
+    if (slots.length === 0) return []
+
     const sessions = Calendar2.getSessions(calendarData, date)
 
     const possibleSlots = Calendar2.getPossibleSlots(calendarData, slots, date, duration)
+
+    const validSlot = this.getValidSlot(calendarData, possibleSlots, sessions)
+
+    const totalDuration = durationBefore + durationAfter + duration
+
+    // todo: use string interp
+    const objSlot = {
+      startHour: moment.utc(dateISO + ' ' + validSlot?.start).toDate(),
+      endHour: (this.getEndHourValidSlot(dateISO, validSlot?.start, totalDuration))
+      // clientStartHour: moment.utc(dateISO + ' ' + clientStartHour).toDate(),
+      // clientEndHour: moment.utc(dateISO + ' ' + clientEndHour).toDate()
+    }
+    console.log('objSlot', objSlot)
+
+    return [objSlot]
   }
 }

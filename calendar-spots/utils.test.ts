@@ -71,7 +71,7 @@ describe('getValidSlots()', () => {
       { start: '11:15', end: '13:15' }
     ]
     const res = Calendar2.getValidSlot(calendarData1, possibleSlots, sessions)
-    expect(res).toStrictEqual([possibleSlots[1]])
+    expect(res).toStrictEqual(possibleSlots[1])
   })
 
   it('Should get valid slot for calendar 2', () => {
@@ -85,7 +85,7 @@ describe('getValidSlots()', () => {
       { start: '16:15', end: '17:45' }
     ]
     const res = Calendar2.getValidSlot(calendarData2, possibleSlots, sessions)
-    expect(res).toStrictEqual([possibleSlots[2]])
+    expect(res).toStrictEqual(possibleSlots[2])
   })
 
   it('Should return valid slot', () => {
@@ -107,4 +107,17 @@ describe('getValidSlots()', () => {
     const res = Calendar2.isValidSlot(slot, sessions)
     expect(res).toBe(false)
   })
+
+  // it('Should get end hour for valid slot (1)', () => {
+  //   const dateISO = '2023-04-10'
+  //   const res = Calendar2.getEndHourValidSlot(dateISO, '16:00', 30)
+  //   console.log('res', res)
+  // })
+
+  // it.skip('Should get end hour for valid slot (2)', () => {
+  //   const dateISO = '2023-04-10T16:00:00.000Z'
+  //   const res = Calendar2.getEndHourValidSlot(dateISO, 75)
+  //   console.log('res', JSON.stringify(res))
+  //   expect((res)).toStrictEqual('2023-04-10T17:15:00.000Z')
+  // })
 })
