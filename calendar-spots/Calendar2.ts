@@ -1,13 +1,13 @@
 import moment from 'moment'
 import { TCalendar, Event } from './types'
 
+/**
+ * Class: Calendar2
+ * Calendar data can not be emply (Typescript strict flag enabled)
+ * Load calendar 1 by default
+ */
 export default class Calendar2 {
-  calendarData: TCalendar
-
-  constructor () {
-    // Calendar Data can not be emply. Load calendar 1 by default
-    this.calendarData = this.loadCalendar(1)
-  }
+  calendarData: TCalendar = this.loadCalendar(1)
 
   loadCalendar (calendarId: number): TCalendar {
     return require(`./calendars/calendar.${calendarId}.json`)
@@ -25,12 +25,13 @@ export default class Calendar2 {
     return sessions
   }
 
+  // todo: rename calendarData to calendar
   getTotalDurationUserRequest (calendarData: TCalendar, duration: number): number {
     const { durationBefore, durationAfter } = calendarData
     return durationBefore + durationAfter + duration
   }
 
-  isValidDuration (calendarData: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string) {
+  isValidDuration (calendarData: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string):boolean {
     const totalUserDuration = this.getTotalDurationUserRequest(calendarData, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
@@ -71,15 +72,16 @@ export default class Calendar2 {
     return result
   }
 
-  getStartHour (dateISO: string, slotStart: string | undefined) {
-    return moment.utc(`${dateISO} ${slotStart}`).toDate()
+  getStartHour (date: string, slotStart: string | undefined): Date {
+    return moment.utc(`${date} ${slotStart}`).toDate()
   }
 
-  getEndHour (dateISO: string, slotStart: string | undefined, duration: number) {
-    const startHour = moment.utc(`${dateISO} ${slotStart}`)
+  getEndHour (date: string, slotStart: string | undefined, duration: number): Date {
+    const startHour = moment.utc(`${date} ${slotStart}`)
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
+  // todo: add return type
   getAvailableSpots (calendarId: number, date: string, duration: number) {
     this.calendarData = this.loadCalendar(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')

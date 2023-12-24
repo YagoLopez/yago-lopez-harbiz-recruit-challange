@@ -19,7 +19,7 @@ describe('isValidDuration()', () => {
     expect(res).toBe(true)
   })
 
-  it('Should return that event duration is invalid for user request duration', () => {
+  it('Should return that event duration is invalid for user request duration (3)', () => {
     const calendarEventDuration = { start: '10:00', end: '10:15' }
     const res = calendar2.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(false)
