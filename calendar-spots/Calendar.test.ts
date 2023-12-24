@@ -1,12 +1,12 @@
 import moment from 'moment'
 import assert from 'assert'
-import Calendar2 from './Calendar2'
+import Calendar from './Calendar'
 
-const calendar2 = new Calendar2()
+const calendar = new Calendar()
 
 describe('getAvailableSpot', function () {
   it('Should get 1 available spots of calendar 1', function () {
-    const result = calendar2.getAvailableSpots(1, '10-04-2023', 30)
+    const result = calendar.getAvailableSpots(1, '10-04-2023', 30)
     assert.ok(result)
     assert.equal(result.length, 1)
     assert.equal(
@@ -22,7 +22,7 @@ describe('getAvailableSpot', function () {
 
 describe('getAvailableSpot', function () {
   it('Should get 1 available spots of calendar 2', function () {
-    const result = calendar2.getAvailableSpots(2, '13-04-2023', 25)
+    const result = calendar.getAvailableSpots(2, '13-04-2023', 25)
     assert.ok(result)
     assert.equal(result.length, 1)
     assert.equal(
@@ -38,7 +38,7 @@ describe('getAvailableSpot', function () {
 
 describe('getAvailableSpot', function () {
   it('Should get no available spots of calendar 3', function () {
-    const result = calendar2.getAvailableSpots(3, '16-04-2023', 25)
+    const result = calendar.getAvailableSpots(3, '16-04-2023', 25)
     assert.ok(result)
     assert.equal(result.length, 0)
   })

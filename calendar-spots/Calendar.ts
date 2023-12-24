@@ -2,11 +2,10 @@ import moment from 'moment'
 import { TCalendar, Event } from './types'
 
 /**
- * Class: Calendar
- * Calendar data can not be empty (Typescript strict flag enabled)
+ * @Notes: calendar data can not be empty (Typescript strict flag enabled)
  * Load calendar 1 by default
  */
-export default class Calendar2 {
+export default class Calendar {
   calendarData: TCalendar = this.loadCalendar(1)
 
   loadCalendar (calendarId: number): TCalendar {
@@ -25,13 +24,13 @@ export default class Calendar2 {
     return sessions
   }
 
-  getTotalDurationUserRequest (calendar: TCalendar, duration: number): number {
+  getTotalDuration (calendar: TCalendar, duration: number): number {
     const { durationBefore, durationAfter } = calendar
     return durationBefore + durationAfter + duration
   }
 
   isValidDuration (calendar: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string):boolean {
-    const totalUserDuration = this.getTotalDurationUserRequest(calendar, userRequestedDuration)
+    const totalUserDuration = this.getTotalDuration(calendar, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = eventDuration
     const startHour = moment(`${dateISO}T${start}`)
@@ -80,7 +79,6 @@ export default class Calendar2 {
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
-  // todo: add return type
   getAvailableSpots (calendarId: number, date: string, duration: number) {
     this.calendarData = this.loadCalendar(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
