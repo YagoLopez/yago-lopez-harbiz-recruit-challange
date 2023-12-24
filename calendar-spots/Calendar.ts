@@ -6,10 +6,19 @@ import { TCalendar, Event } from './types'
  * Load calendar 1 by default
  */
 export default class Calendar {
-  calendarData: TCalendar = this.loadCalendar(1)
+  calendarData: TCalendar
 
-  loadCalendar (calendarId: number): TCalendar {
-    return require(`./calendars/calendar.${calendarId}.json`)
+  constructor () {
+    this.calendarData = require('./calendars/calendar.1.json')
+  }
+
+  loadCalendar (calendarId: number) {
+    const calendarPath = `./calendars/calendar.${calendarId}.json`
+    try {
+      this.calendarData = require(calendarPath)
+    } catch (error) {
+      console.log(`⛔ Error loading calendar: ${calendarPath}`)
+    }
   }
 
   getSlots (date: string): Event[] {
@@ -80,7 +89,7 @@ export default class Calendar {
   }
 
   getAvailableSpots (calendarId: number, date: string, duration: number) {
-    this.calendarData = this.loadCalendar(calendarId)
+    this.loadCalendar(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const slots = this.getSlots(date)
     if (slots.length === 0) return []

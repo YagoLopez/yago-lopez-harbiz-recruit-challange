@@ -110,3 +110,29 @@ describe('getValidSlots()', () => {
     expect(res).toBe(false)
   })
 })
+
+describe('loadCalendar', () => {
+  it('Should load calendar if it exists', () => {
+    const calendar3 = {
+      durationBefore: 15,
+      durationAfter: 0,
+      slots: {
+        '10-04-2023': [
+          { start: '10:00', end: '10:15' },
+          { start: '11:15', end: '11:25' },
+          { start: '22:00', end: '22:45' }
+        ],
+        '16-04-2023': []
+      },
+      sessions: []
+    }
+
+    calendar.loadCalendar(3)
+    expect(calendar.calendarData).toStrictEqual(calendar3)
+  })
+
+  it('Should not throw if calendar does not exists', () => {
+    calendar.loadCalendar(4)
+    expect(calendar).toBeDefined()
+  })
+})
