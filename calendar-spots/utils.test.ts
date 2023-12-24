@@ -109,18 +109,4 @@ describe('getValidSlots()', () => {
     const res = calendar2.isValidSlot(slot, sessions)
     expect(res).toBe(false)
   })
-
-  // todo: remove comments
-  // it('Should get end hour for valid slot (1)', () => {
-  //   const dateISO = '2023-04-10'
-  //   const res = calendar2.getEndHourValidSlot(dateISO, '16:00', 30)
-  //   console.log('res', res)
-  // })
-
-  // it.skip('Should get end hour for valid slot (2)', () => {
-  //   const dateISO = '2023-04-10T16:00:00.000Z'
-  //   const res = calendar2.getEndHourValidSlot(dateISO, 75)
-  //   console.log('res', JSON.stringify(res))
-  //   expect((res)).toStrictEqual('2023-04-10T17:15:00.000Z')
-  // })
 })

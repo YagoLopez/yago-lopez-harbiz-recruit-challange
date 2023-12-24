@@ -6,10 +6,10 @@ export default class Calendar2 {
 
   constructor () {
     // Calendar Data can not be emply. Load calendar 1 by default
-    this.calendarData = this.loadCalendarData(1)
+    this.calendarData = this.loadCalendar(1)
   }
 
-  loadCalendarData (calendarId: number): TCalendar {
+  loadCalendar (calendarId: number): TCalendar {
     return require(`./calendars/calendar.${calendarId}.json`)
   }
 
@@ -71,17 +71,17 @@ export default class Calendar2 {
     return result
   }
 
+  getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
+    return moment.utc(`${dateISO} ${slotStart}`).toDate()
+  }
+
   getEndHourValidSlot (dateISO: string, slotStart: string | undefined, duration: number) {
     const startHour = moment.utc(`${dateISO} ${slotStart}`)
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
-  getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
-    return moment.utc(`${dateISO} ${slotStart}`).toDate()
-  }
-
   getAvailableSpots (calendarId: number, date: string, duration: number) {
-    this.calendarData = this.loadCalendarData(calendarId)
+    this.calendarData = this.loadCalendar(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { durationBefore, durationAfter } = this.calendarData
     const slots = this.getSlots(date)
