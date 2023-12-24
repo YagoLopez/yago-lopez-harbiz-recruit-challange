@@ -1,6 +1,3 @@
-// todo: remove
-// import { JestConfigWithTsJest } from "ts-jest";
-
 const config = {
   verbose: true,
   transform: {
