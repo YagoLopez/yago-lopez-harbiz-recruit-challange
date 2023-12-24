@@ -2,7 +2,7 @@ import moment from 'moment'
 import { TCalendar, Event } from './types'
 
 /**
- * @Notes: calendar data can not be empty (Typescript strict flag enabled)
+ * @Note: calendar data can not be empty (Typescript strict flag enabled)
  * Load calendar 1 by default
  */
 export default class Calendar {
