@@ -71,11 +71,11 @@ export default class Calendar2 {
     return result
   }
 
-  getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
+  getStartHour (dateISO: string, slotStart: string | undefined) {
     return moment.utc(`${dateISO} ${slotStart}`).toDate()
   }
 
-  getEndHourValidSlot (dateISO: string, slotStart: string | undefined, duration: number) {
+  getEndHour (dateISO: string, slotStart: string | undefined, duration: number) {
     const startHour = moment.utc(`${dateISO} ${slotStart}`)
     return moment(startHour).add(duration, 'minutes').toDate()
   }
@@ -93,8 +93,8 @@ export default class Calendar2 {
     const totalDuration = durationBefore + durationAfter + duration
 
     const objSlot = {
-      startHour: this.getStartHourValidSlot(dateISO, validSlot?.start),
-      endHour: this.getEndHourValidSlot(dateISO, validSlot?.start, totalDuration)
+      startHour: this.getStartHour(dateISO, validSlot?.start),
+      endHour: this.getEndHour(dateISO, validSlot?.start, totalDuration)
     }
 
     return [objSlot]
