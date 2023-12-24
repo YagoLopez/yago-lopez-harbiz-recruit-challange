@@ -1,120 +1,11 @@
-// todo: function to get calendar data
-
 import moment from 'moment'
 import { TCalendar, Duration } from './types'
-// import * as data from './calendars/calendar.1.json'
 
-/*
 export default class Calendar2 {
-
-  static getAvailableSpots (calendar: number, date: string, duration: number) {
-    const data = require(`./calendars/calendar.${calendar}.json`)
-    const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
-    const durationBefore = data.durationBefore
-    const durationAfter = data.durationAfter
-
-    const daySlots = data.slots[date]
-
-    if (!daySlots) return []
-
-    const realSpots: any[] = []
-    daySlots.forEach((daySlot: any) => {
-      if (data.sessions && data.sessions[date]) {
-        let noConflicts = true
-        data.sessions[date].forEach((sessionSlot: any) => {
-          const sessionStart = moment(dateISO + ' ' + sessionSlot.start).valueOf()
-          const sessionEnd = moment(dateISO + ' ' + sessionSlot.end).valueOf()
-          const start = moment(dateISO + ' ' + daySlot.start).valueOf()
-          const end = moment(dateISO + ' ' + daySlot.end).valueOf()
-          if (sessionStart > start && sessionEnd < end) {
-            realSpots.push({ start: daySlot.start, end: sessionSlot.start })
-            realSpots.push({ start: sessionSlot.end, end: daySlot.end })
-            noConflicts = false
-          } else if (sessionStart === start && sessionEnd < end) {
-            realSpots.push({ start: sessionSlot.end, end: daySlot.end })
-            noConflicts = false
-          } else if (sessionStart > start && sessionEnd === end) {
-            realSpots.push({ start: daySlot.start, end: sessionSlot.start })
-            noConflicts = false
-          } else if (sessionStart === start && sessionEnd === end) {
-            noConflicts = false
-          }
-        })
-        if (noConflicts) {
-          realSpots.push(daySlot)
-        }
-      } else {
-        realSpots.push(daySlot)
-      }
-    })
-
-    const arrSlot: any[] = []
-    realSpots.forEach(function (slot) {
-      let init = 0
-      let startHour
-      let endHour
-      let clientStartHour
-      let clientEndHour
-
-      function getMomentHour (hour: any) {
-        const finalHourForAdd = moment(dateISO + ' ' + hour)
-        return finalHourForAdd
-      }
-
-      function addMinutes (hour: any, minutes: any) {
-        const result = moment(hour)
-          .add(minutes, 'minutes')
-          .format('HH:mm')
-        return result
-      }
-
-      function getOneMiniSlot (startSlot: any, endSlot: any) {
-        const startHourFirst = getMomentHour(startSlot)
-
-        startHour = startHourFirst.format('HH:mm')
-        endHour = addMinutes(
-          startHourFirst,
-          durationBefore + duration + durationAfter
-        )
-        clientStartHour = addMinutes(startHourFirst, durationBefore)
-        clientEndHour = addMinutes(startHourFirst, duration)
-
-        if (
-          moment.utc(endHour, 'HH:mm').valueOf() >
-          moment.utc(endSlot, 'HH:mm').valueOf()
-        ) {
-          return null
-        }
-        const objSlot = {
-          startHour: moment.utc(dateISO + ' ' + startHour).toDate(),
-          endHour: moment.utc(dateISO + ' ' + endHour).toDate(),
-          clientStartHour: moment.utc(dateISO + ' ' + clientStartHour).toDate(),
-          clientEndHour: moment.utc(dateISO + ' ' + clientEndHour).toDate()
-        }
-        init += 1
-        return objSlot
-      }
-
-      let start = slot.start
-      let resultSlot
-      do {
-        resultSlot = getOneMiniSlot(start, slot.end)
-        if (resultSlot) {
-          arrSlot.push(resultSlot)
-          start = moment.utc(resultSlot.endHour).format('HH:mm')
-        }
-      } while (resultSlot)
-
-      return arrSlot
-    })
-    console.log('arrSlot', arrSlot)
-    return arrSlot
-
+  static loadCalendarData (calendarId: number): TCalendar {
+    return require(`./calendars/calendar.${calendarId}.json`)
   }
-}
-*/
 
-export default class Calendar2 {
   static getSlots (calendarData: TCalendar, date: string): Duration[] {
     const slots = calendarData.slots[date]
     if (!slots) return []
@@ -178,31 +69,26 @@ export default class Calendar2 {
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
-  static getAvailableSpots (calendar: number, date: string, duration: number) {
-    const calendarData = require(`./calendars/calendar.${calendar}.json`)
+  static getStartHourValidSlot (dateISO: string, slotStart: string | undefined) {
+    return moment.utc(`${dateISO} ${slotStart}`).toDate()
+  }
+
+  static getAvailableSpots (calendarId: number, date: string, duration: number) {
+    const calendarData = this.loadCalendarData(calendarId)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { durationBefore, durationAfter } = calendarData
-
     const slots = Calendar2.getSlots(calendarData, date)
-
     if (slots.length === 0) return []
 
     const sessions = Calendar2.getSessions(calendarData, date)
-
     const possibleSlots = Calendar2.getPossibleSlots(calendarData, slots, date, duration)
-
     const validSlot = this.getValidSlot(calendarData, possibleSlots, sessions)
-
     const totalDuration = durationBefore + durationAfter + duration
 
-    // todo: use string interp
     const objSlot = {
-      startHour: moment.utc(dateISO + ' ' + validSlot?.start).toDate(),
-      endHour: (this.getEndHourValidSlot(dateISO, validSlot?.start, totalDuration))
-      // clientStartHour: moment.utc(dateISO + ' ' + clientStartHour).toDate(),
-      // clientEndHour: moment.utc(dateISO + ' ' + clientEndHour).toDate()
+      startHour: this.getStartHourValidSlot(dateISO, validSlot?.start),
+      endHour: this.getEndHourValidSlot(dateISO, validSlot?.start, totalDuration)
     }
-    console.log('objSlot', objSlot)
 
     return [objSlot]
   }
