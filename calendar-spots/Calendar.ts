@@ -17,7 +17,7 @@ export default class Calendar {
     try {
       this.calendarData = require(calendarPath)
     } catch (error) {
-      console.log(`⛔ Error loading calendar: ${calendarPath}`)
+      console.log(`⚠️ Error loading calendar: ${calendarPath}`)
     }
   }
 
@@ -38,10 +38,10 @@ export default class Calendar {
     return durationBefore + durationAfter + duration
   }
 
-  isValidDuration (calendar: TCalendar, eventDuration: Event, userRequestedDuration: number, userRequestDate: string):boolean {
+  isValidDuration (calendar: TCalendar, event: Event, userRequestedDuration: number, userRequestDate: string):boolean {
     const totalUserDuration = this.getTotalDuration(calendar, userRequestedDuration)
     const dateISO = moment(userRequestDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
-    const { start, end } = eventDuration
+    const { start, end } = event
     const startHour = moment(`${dateISO}T${start}`)
     const endHour = moment(`${dateISO}T${end}`)
     const slotDuration = endHour.diff(startHour, 'minutes')
@@ -69,14 +69,12 @@ export default class Calendar {
   }
 
   getValidSlot (possibleSlots: Event[], sessions: Event[]): Event | undefined {
-    const result = undefined
     for (const slot of possibleSlots) {
       const isValid = this.isValidSlot(slot, sessions)
       if (isValid) {
         return slot
       }
     }
-    return result
   }
 
   getStartHour (date: string, slotStart: string | undefined): Date {
