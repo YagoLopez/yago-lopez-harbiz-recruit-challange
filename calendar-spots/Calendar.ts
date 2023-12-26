@@ -97,11 +97,9 @@ export default class Calendar {
     const validSlot = this.getValidSlot(possibleSlots, sessions)
     const totalDuration = this.getTotalDuration(this.calendarData, duration)
 
-    const objSlot = {
+    return [{
       startHour: this.getStartHour(dateISO, validSlot?.start),
       endHour: this.getEndHour(dateISO, validSlot?.start, totalDuration)
-    }
-
-    return [objSlot]
+    }]
   }
 }
