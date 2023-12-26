@@ -27,4 +27,6 @@ See the tests for more information.
 - Maintainability: 
   - Code Coverage for calendar class methods to be able to refactor safely without breaking anything
   - Clean Code: `Calendar` logic is grouped in small functions (class methods) easy to understand, test and modify
-- Defensive programming: error control loading calendar data
+- Defensive programming: 
+  - Error control loading calendar data
+  - Typescript Strict Option Enabled

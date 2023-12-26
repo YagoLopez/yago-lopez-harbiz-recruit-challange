@@ -61,7 +61,11 @@ export default class Calendar {
   isValidSlot (slot: Event, sessions: Event[]): boolean {
     let result = true
     for (const session of sessions) {
-      if (slot.start === session.start && slot.end === session.end) {
+      const slotStart = moment(slot.start, 'HH:mm')
+      const slotEnd = moment(slot.end, 'HH:mm')
+      const sessionStart = moment(session.start, 'HH:mm')
+      const sessionEnd = moment(session.end, 'HH:mm')
+      if (slotStart.isSameOrAfter(sessionStart) && slotEnd.isSameOrBefore(sessionEnd)) {
         result = false
       }
     }
