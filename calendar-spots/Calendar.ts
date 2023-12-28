@@ -27,12 +27,6 @@ export default class Calendar {
     return events
   }
 
-  getSessions (date: string): Event[] {
-    const sessions = this.calendarData.sessions[date]
-    if (!sessions) return []
-    return sessions
-  }
-
   getTotalDuration (calendar: TCalendar, duration: number): number {
     const { durationBefore, durationAfter } = calendar
     return durationBefore + durationAfter + duration
