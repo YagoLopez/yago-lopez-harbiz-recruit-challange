@@ -68,19 +68,16 @@ export default class Calendar {
 
   getValidSlot (possibleSlots: Event[], sessions: Event[]): Event | undefined {
     for (const slot of possibleSlots) {
-      const isValid = this.isValidSlot(slot, sessions)
-      if (isValid) {
-        return slot
-      }
+      if (this.isValidSlot(slot, sessions)) { return slot }
     }
   }
 
-  getStartHour (date: string, slotStart: string | undefined): Date {
-    return moment.utc(`${date} ${slotStart}`).toDate()
+  getStartHour (date: string, eventStart: string | undefined): Date {
+    return moment.utc(`${date} ${eventStart}`).toDate()
   }
 
-  getEndHour (date: string, slotStart: string | undefined, duration: number): Date {
-    const startHour = moment.utc(`${date} ${slotStart}`)
+  getEndHour (date: string, eventStart: string | undefined, duration: number): Date {
+    const startHour = moment.utc(`${date} ${eventStart}`)
     return moment(startHour).add(duration, 'minutes').toDate()
   }
 
