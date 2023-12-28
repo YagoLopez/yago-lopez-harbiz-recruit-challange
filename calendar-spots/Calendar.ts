@@ -27,13 +27,13 @@ export default class Calendar {
     return events
   }
 
-  getTotalDuration (calendar: TCalendar, duration: number): number {
-    const { durationBefore, durationAfter } = calendar
+  getTotalDuration (duration: number): number {
+    const { durationBefore, durationAfter } = this.calendarData
     return durationBefore + durationAfter + duration
   }
 
-  isValidDuration (calendar: TCalendar, event: Event, duration: number, date: string):boolean {
-    const totalUserDuration = this.getTotalDuration(calendar, duration)
+  isValidDuration (event: Event, duration: number, date: string):boolean {
+    const totalUserDuration = this.getTotalDuration(duration)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = event
     const startHour = moment(`${dateISO}T${start}`)
@@ -42,10 +42,10 @@ export default class Calendar {
     return slotDuration >= totalUserDuration
   }
 
-  getPossibleSlots (calendar: TCalendar, slots: Event[], date: string, duration: number): Event[] {
+  getPossibleSlots (slots: Event[], date: string, duration: number): Event[] {
     const possibleSlots: Event[] = []
     slots.forEach((slot: Event) => {
-      if (this.isValidDuration(calendar, slot, duration, date)) {
+      if (this.isValidDuration(slot, duration, date)) {
         possibleSlots.push(slot)
       }
     })
@@ -91,9 +91,9 @@ export default class Calendar {
     if (slots.length === 0) return []
 
     const sessions = this.getEvents('sessions', date)
-    const possibleSlots = this.getPossibleSlots(this.calendarData, slots, date, duration)
+    const possibleSlots = this.getPossibleSlots(slots, date, duration)
     const validSlot = this.getValidSlot(possibleSlots, sessions)
-    const totalDuration = this.getTotalDuration(this.calendarData, duration)
+    const totalDuration = this.getTotalDuration(duration)
 
     return [{
       startHour: this.getStartHour(dateISO, validSlot?.start),

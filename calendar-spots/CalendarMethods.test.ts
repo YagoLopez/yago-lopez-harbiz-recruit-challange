@@ -1,27 +1,24 @@
 import Calendar from './Calendar'
 import { Event } from './types'
-const calendarData1 = require('./calendars/calendar.1.json')
-const calendarData2 = require('./calendars/calendar.2.json')
-const calendarData3 = require('./calendars/calendar.3.json')
 
 const calendar = new Calendar()
 
 describe('isValidDuration()', () => {
   it('Should return that event duration is valid for user request duration (1)', () => {
     const calendarEventDuration = { start: '16:00', end: '17:15' }
-    const res = calendar.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar.isValidDuration(calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(true)
   })
 
   it('Should return that event duration is valid for user request duration (2)', () => {
     const calendarEventDuration = { start: '11:15', end: '13:15' }
-    const res = calendar.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar.isValidDuration(calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(true)
   })
 
-  it('Should return that event duration is invalid for user request duration (3)', () => {
+  it('Should return that event duration is invalid for user request duration', () => {
     const calendarEventDuration = { start: '10:00', end: '10:15' }
-    const res = calendar.isValidDuration(calendarData1, calendarEventDuration, 30, '10-04-2023')
+    const res = calendar.isValidDuration(calendarEventDuration, 30, '10-04-2023')
     expect(res).toBe(false)
   })
 })
@@ -33,7 +30,7 @@ describe('getPossibleSlots()', () => {
       { start: '11:15', end: '13:15' },
       { start: '16:00', end: '17:15' }
     ]
-    const res = calendar.getPossibleSlots(calendarData1, slots, '10-04-2023', 30)
+    const res = calendar.getPossibleSlots(slots, '10-04-2023', 30)
     const expected = [
       { start: '11:15', end: '13:15' },
       { start: '16:00', end: '17:15' }
@@ -42,12 +39,14 @@ describe('getPossibleSlots()', () => {
   })
 
   it('Calendar 2', () => {
+    const calendar2 = new Calendar()
+    calendar2.loadCalendar(2)
     const slots = [
       { start: '12:00', end: '12:45' },
       { start: '16:15', end: '17:45' },
       { start: '18:00', end: '18:25' }
     ]
-    const res = calendar.getPossibleSlots(calendarData2, slots, '13-04-2023', 25)
+    const res = calendar2.getPossibleSlots(slots, '13-04-2023', 25)
     const expected = [
       { start: '12:00', end: '12:45' },
       { start: '16:15', end: '17:45' },
@@ -57,8 +56,10 @@ describe('getPossibleSlots()', () => {
   })
 
   it('Calendar 3', () => {
+    const calendar3 = new Calendar()
+    calendar3.loadCalendar(3)
     const slots: Event[] = []
-    const res = calendar.getPossibleSlots(calendarData3, slots, '16-04-2023', 25)
+    const res = calendar.getPossibleSlots(slots, '16-04-2023', 25)
     expect(res).toStrictEqual([])
   })
 })
