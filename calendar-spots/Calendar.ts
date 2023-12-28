@@ -33,13 +33,13 @@ export default class Calendar {
   }
 
   isValidDuration (event: Event, duration: number, date: string):boolean {
-    const totalUserDuration = this.getTotalDuration(duration)
+    const totalDuration = this.getTotalDuration(duration)
     const dateISO = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD')
     const { start, end } = event
     const startHour = moment(`${dateISO}T${start}`)
     const endHour = moment(`${dateISO}T${end}`)
     const slotDuration = endHour.diff(startHour, 'minutes')
-    return slotDuration >= totalUserDuration
+    return slotDuration >= totalDuration
   }
 
   getPossibleSlots (slots: Event[], date: string, duration: number): Event[] {
