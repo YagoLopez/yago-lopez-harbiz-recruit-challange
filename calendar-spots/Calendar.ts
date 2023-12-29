@@ -6,11 +6,7 @@ import { TCalendar, Event } from './types'
  * Load calendar 1 by default
  */
 export default class Calendar {
-  calendarData: TCalendar
-
-  constructor () {
-    this.calendarData = require('./calendars/calendar.1.json')
-  }
+  calendarData: TCalendar = require('./calendars/calendar.1.json')
 
   loadCalendar (calendarId: number) {
     const calendarPath = `./calendars/calendar.${calendarId}.json`
