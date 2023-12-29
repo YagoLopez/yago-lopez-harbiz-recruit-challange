@@ -52,14 +52,17 @@ export default class Calendar {
     return possibleSlots
   }
 
+  happensIn (event: Event, hour: string): boolean {
+    const slotStart = moment(hour, 'HH:mm')
+    const sessionStart = moment(event.start, 'HH:mm')
+    const sessionEnd = moment(event.end, 'HH:mm')
+    return (slotStart.isSameOrAfter(sessionStart) && slotStart.isSameOrBefore(sessionEnd))
+  }
+
   isValidSlot (slot: Event, sessions: Event[]): boolean {
     let result = true
     for (const session of sessions) {
-      const slotStart = moment(slot.start, 'HH:mm')
-      const slotEnd = moment(slot.end, 'HH:mm')
-      const sessionStart = moment(session.start, 'HH:mm')
-      const sessionEnd = moment(session.end, 'HH:mm')
-      if (slotStart.isSameOrAfter(sessionStart) && slotEnd.isSameOrBefore(sessionEnd)) {
+      if (this.happensIn(session, slot.start) || this.happensIn(session, slot.end)) {
         result = false
       }
     }
