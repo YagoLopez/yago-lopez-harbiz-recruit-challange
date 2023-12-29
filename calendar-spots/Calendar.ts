@@ -53,10 +53,10 @@ export default class Calendar {
   }
 
   happensIn (event: Event, hour: string): boolean {
-    const slotStart = moment(hour, 'HH:mm')
-    const sessionStart = moment(event.start, 'HH:mm')
-    const sessionEnd = moment(event.end, 'HH:mm')
-    return (slotStart.isSameOrAfter(sessionStart) && slotStart.isSameOrBefore(sessionEnd))
+    const moment1 = moment(hour, 'HH:mm')
+    const eventStart = moment(event.start, 'HH:mm')
+    const eventEnd = moment(event.end, 'HH:mm')
+    return (moment1.isSameOrAfter(eventStart) && moment1.isSameOrBefore(eventEnd))
   }
 
   isValidSlot (slot: Event, sessions: Event[]): boolean {
